@@ -62,6 +62,7 @@ const settings: Settings = {
 const puzzle: PuzzleItem[] = [];
 const selectedItem: PuzzleItem = { notes: {} };
 const undoItems: PuzzleItem[] = [];
+const redoItems: PuzzleItem[] = [];
 const isFinished: boolean = false;
 
 const store = writable({
@@ -70,6 +71,7 @@ const store = writable({
   settings,
   selectedItem,
   undoItems,
+  redoItems,
   isFinished,
 });
 
@@ -193,11 +195,39 @@ export function undoLastAction() {
     if (!store.undoItems.length) return store;
     const lastItem = store.undoItems.pop();
     const idx = lastItem?.idx || 0;
+
+    // Save the item in case we want to redo
+    store.redoItems.push({
+      ...store.puzzle[idx],
+      notes: { ...store.puzzle[idx].notes },
+    });    
+
     store.puzzle[idx].value = lastItem?.value;
     store.puzzle[idx].notes = lastItem?.notes || {};
     store.selectedItem = store.puzzle[idx];
     return store;
   });
 }
+
+export function redoLastAction() {
+  store.update((store) => {
+    if (!store.redoItems.length) return store;
+    const lastItem = store.redoItems.pop();
+    const idx = lastItem?.idx || 0;
+
+    // Push it back into the undoes
+    store.undoItems.push({
+      ...store.puzzle[idx],
+      notes: { ...store.puzzle[idx].notes },
+    });    
+
+    store.puzzle[idx].value = lastItem?.value;
+    store.puzzle[idx].notes = lastItem?.notes || {};
+    store.selectedItem = store.puzzle[idx];
+
+    return store;
+  });
+}
+
 
 export default store;

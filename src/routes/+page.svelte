@@ -7,6 +7,7 @@
   import Settings from "./components/Settings.svelte";
   import NumberButton from "./components/NumberButton.svelte";
   import UndoButton from "./components/UndoButton.svelte";
+  import RedoButton from "./components/RedoButton.svelte";
   import EraseButton from "./components/EraseButton.svelte";
   import ActiveNotesButton from "./components/ActiveNotesButton.svelte";
   import ActiveAdvancedNotesButton from "./components/ActiveAdvancedNotesButton.svelte";
@@ -132,8 +133,9 @@
       {/if}
     </div>
     <div>
-      <div class="grid grid-cols-4 gap-4 w-full lg:w-[358px] tracking-wide lg:mb-5 mb-8">
+      <div class="grid grid-cols-5 gap-4 w-full lg:w-[358px] tracking-wide lg:mb-5 mb-8">
         <UndoButton />
+        <RedoButton />
         <EraseButton />
         <ActiveNotesButton />
         <ActiveAdvancedNotesButton />
